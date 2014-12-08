@@ -4,7 +4,9 @@ try:
     import flickrapi
 except ImportError as e:
     print(e)
-from JsonConfigHandler import JsonConfigHandler
+
+from geodata.JsonConfigHandler import JsonConfigHandler
+from common.termcolor import colored
 
 apikey = None
 secret = None
@@ -23,15 +25,15 @@ except:
 sampleId = 753692
 
 # # Example
-
 flickr = flickrapi.FlickrAPI(apikey, secret)
 request = flickr.places.getChildrenWithPhotosPublic(woe_id=sampleId)
 list = request[0].getchildren()
 print("length: %s" % len(list))
 for i in list:
     if i.attrib['place_type_id'] == '22':
-        print(i.attrib['latitude'], i.attrib['longitude'])
-        print(i.text)
+        print("latitude: %s, longitude: %s \n\t-> %s" % (colored(i.attrib['latitude'], "green"),
+                                                         colored(i.attrib['longitude'], "green"),
+                                                         colored(i.text, "blue")))
 
 '''
 41.380 2.176

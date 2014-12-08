@@ -1,27 +1,39 @@
 __author__ = 'jmeline'
 
-
 try:
     import flickrapi
 except ImportError as e:
     print(e)
+from JsonConfigHandler import JsonConfigHandler
 
-apikey="< api key here >"
-secret="< secret key here >"
+apikey = None
+secret = None
 
-sampleId=753692
+json = JsonConfigHandler()
 
-## Example
+try:
+    apikey = json.extractedObject.apikey
+    secret = json.extractedObject.secret
+except:
+    print("Error! You need to have a valid apikey and secret key to use Flickr")
+    import sys
+
+    sys.exit(1)
+
+sampleId = 753692
+
+# # Example
 
 flickr = flickrapi.FlickrAPI(apikey, secret)
 request = flickr.places.getChildrenWithPhotosPublic(woe_id=sampleId)
+list = request[0].getchildren()
+print("length: %s" % len(list))
+for i in list:
+    if i.attrib['place_type_id'] == '22':
+        print(i.attrib['latitude'], i.attrib['longitude'])
+        print(i.text)
 
 '''
-In [18]: for i in list:
-   ....:     if i.attrib['place_type_id']== '22':
-   ....:         print(i.attrib['latitude'], i.attrib['longitude'])
-   ....:         print(i.text)
-   ....:
 41.380 2.176
 Ciutat Vella, Barcelona, Catalonia, ES, Spain
 41.393 2.161
